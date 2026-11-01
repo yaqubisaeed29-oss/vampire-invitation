@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#100d20">
+<title>امشب میای Vampire؟ 🦇</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Tahoma,Arial,sans-serif}
+body{min-height:100vh;display:grid;place-items:center;padding:20px;color:#fff;background:radial-gradient(circle at 50% 15%,#43215f 0,#1b1430 38%,#090b18 100%);overflow:hidden}
+body:before,body:after{content:"";position:fixed;width:260px;height:260px;border-radius:50%;filter:blur(85px);opacity:.35;pointer-events:none}
+body:before{background:#a42b8c;top:-100px;right:-80px}body:after{background:#3b67c9;bottom:-120px;left:-80px}
+.card{width:min(480px,100%);padding:clamp(25px,7vw,42px) 22px;text-align:center;border:1px solid #c99aff55;border-radius:28px;background:#111326d9;box-shadow:0 25px 90px #0008, inset 0 0 35px #8a4ac01a;backdrop-filter:blur(14px);position:relative;z-index:1}
+.bat{font-size:64px;filter:drop-shadow(0 0 18px #bd67ff);animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-9px) rotate(-5deg)}}
+h1{font-size:clamp(24px,6vw,34px);margin:14px 0 10px;line-height:1.6}
+p{color:#c8c2dc;font-size:14px;line-height:1.9;margin:0 0 26px}
+.buttons{height:145px;position:relative;display:flex;align-items:center;justify-content:center;gap:16px;direction:ltr}
+button{border:0;border-radius:15px;padding:14px 25px;font: bold 16px Tahoma;cursor:pointer;min-width:118px;transition:left .24s ease,top .24s ease,transform .2s,background .2s;box-shadow:0 8px 25px #0005}
+button:active{transform:scale(.96)}
+#yes{background:linear-gradient(135deg,#3ee6a2,#12a878);color:#06281d}
+#no{background:linear-gradient(135deg,#ff647b,#d92750);color:white;position:relative}
+#message{min-height:34px;margin-top:8px;color:#e6d9ff;font-size:13px}
+.small{font-size:10px;color:#89839e;margin-top:20px}
+.success{color:#72f0bd!important}
+@media(max-width:380px){.buttons{gap:8px}button{min-width:105px;padding:13px 18px;font-size:14px}}
+</style>
+</head>
+<body>
+<main class="card">
+ <div class="bat">🦇</div>
+ <h1>امشب میای Vampire؟</h1>
+ <p>یه دست بازی با هم بزنیم؟<br>منتظر جوابت هستم! 🌙</p>
+ <div class="buttons" id="area">
+  <button id="yes">آره، میام 💜</button>
+  <button id="no">نه 🙃</button>
+ </div>
+ <div id="message" aria-live="polite"></div>
+ <div class="small">یک دعوت دوستانه از طرف دوستت 🖤</div>
+</main>
+<script>
+const yes=document.getElementById('yes');
+const no=document.getElementById('no');
+const area=document.getElementById('area');
+const message=document.getElementById('message');
+const noTexts=[
+ 'مطمئنی نمیای؟ 🥺',
+ 'فقط یه دست! 😭',
+ 'قول می‌دم خوش بگذره! 🦇',
+ 'آخرین فرصته‌ها! 👀',
+ 'هنوزم نظرت همینه؟ 💔',
+ 'باشه... پس واقعاً نمیای؟'
+];
+let noCount=0;
+function sendEmail(answer){
+ const subject=encodeURIComponent('پاسخ دعوت بازی Vampire');
+ const body=encodeURIComponent(answer);
+ // mailto opens the visitor's email app; the visitor must press Send.
+ window.location.href=`mailto:yaqubisaeed29@gmail.com?subject=${subject}&body=${body}`;
+ message.textContent='برنامه ایمیل باز می‌شود؛ برای ارسال پیام، دکمه ارسال را بزن.';
+}
+yes.addEventListener('click',()=>{
+ yes.disabled=true;no.disabled=true;
+ message.textContent='چه عالی! 💜';
+ message.classList.add('success');
+ sendEmail('میام');
+});
+no.addEventListener('click',()=>{
+ noCount++;
+ if(noCount>=6){
+  no.textContent='نه، نمیام 🔴';
+  no.style.position='relative';
+  no.style.left='auto';no.style.top='auto';
+  no.style.background='linear-gradient(135deg,#ff304f,#a90027)';
+  no.onclick=null;
+  no.addEventListener('click',()=>{no.disabled=true;yes.disabled=true;message.textContent='جوابت ثبت شد.';sendEmail('نه نمیام');},{once:true});
+  message.textContent='خب، این بار جواب نهایی رو انتخاب کن!';
+  return;
+ }
+ no.textContent=noTexts[noCount-1];
+ const maxX=Math.max(0,area.clientWidth-no.offsetWidth);
+ const maxY=Math.max(0,area.clientHeight-no.offsetHeight);
+ no.style.position='absolute';
+ no.style.left=Math.round(Math.random()*maxX)+'px';
+ no.style.top=Math.round(Math.random()*maxY)+'px';
+ message.textContent='هنوز می‌تونی نظرت رو عوض کنی! 😄';
+});
+</script>
+</body>
+</html>
